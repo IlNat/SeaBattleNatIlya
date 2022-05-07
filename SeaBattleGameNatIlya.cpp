@@ -3,5 +3,5 @@
 
 int main()
 {
-    first_stage();
+    run();
 }

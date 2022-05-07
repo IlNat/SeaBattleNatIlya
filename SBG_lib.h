@@ -1,3 +1,3 @@
 #pragma once
 
-void first_stage();
+void run();
