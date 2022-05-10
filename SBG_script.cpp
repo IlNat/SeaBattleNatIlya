@@ -120,28 +120,28 @@ int check(char field[10][10]) {
 
 int check_for_mistakes(char field[10][10]) {
 	int mistake = 0;
-	for (int i = 0; i < 10; i++) {
-		for (int j = 0; j < 10; j++) {
+	for (int i = 0; i < 9; i++) {
+		for (int j = 0; j < 9; j++) {
 			if (field[i][j] == (char)42) {//(char)42 = '*'
-				if (j < 6 && field[i][j] == field[i][j + 1] && field[i][j + 1] == field[i][j + 2] && field[i][j + 2] == field[i][j + 3] && field[i][j + 4])//(char)42 = '*'
+				if (j < 6 && field[i][j + 1] == (char)42 && field[i][j + 2] == (char)42 && field[i][j + 3] == (char)42 && field[i][j + 4] == (char)42)//(char)42 = '*'
 					mistake = 1;
-				if (i < 6 && field[i][j] == field[i + 1][j] && field[i + 1][j] == field[i + 2][j] && field[i + 2][j] == field[i + 3][j] && field[i + 4][j])
+				if (i < 6 && field[i + 1][j] == (char)42 && field[i + 2][j] == (char)42 && field[i + 3][j] == (char)42 && field[i + 4][j] == (char)42)
 					mistake = 2;
-				if (j < 9 && i < 9 && j > 0 && i > 0 && (field[i][j] == field[i + 1][j + 1] || field[i][j] == field[i - 1][j + 1] || field[i][j] == field[i - 1][j - 1] || field[i][j] == field[i + 1][j - 1]))
+				if (j < 9 && i < 9 && j > 0 && i > 0 && (field[i + 1][j + 1] == (char)42 || field[i - 1][j + 1] == (char)42 || field[i - 1][j - 1] == (char)42 || field[i + 1][j - 1] == (char)42))
 					mistake = 3;
-				if (j == 9 && i < 9 && (field[i][j] == field[i + 1][j - 1] || field[i][j] == field[i - 1][j - 1]))
+				if (j == 9 && i < 9 && (field[i + 1][j - 1] == (char)42 ||field[i - 1][j - 1] == (char)42))
 					mistake = 4;
-				if (j < 9 && i == 9 && (field[i][j] == field[i + 1][j - 1] || field[i][j] == field[i - 1][j - 1]))
+				if (j < 9 && i == 9 && (field[i + 1][j - 1] == (char)42 ||field[i - 1][j - 1] == (char)42))
 					mistake = 5;
-				if (j < 9 && i < 9 && i > 0 && j > 0 && ((field[i][j] == field[i + 1][j] && field[i][j] == field[i][j + 1]) || (field[i][j] == field[i - 1][j] && field[i][j] == field[i][j + 1]) || (field[i][j] == field[i + 1][j] && field[i][j] == field[i][j - 1]) || (field[i][j] == field[i - 1][j] && field[i][j] == field[i][j - 1])))
+				if (j < 9 && i < 9 && i > 0 && j > 0 && ((field[i + 1][j] == (char)42 && field[i][j + 1] == (char)42) || (field[i - 1][j] == (char)42 && field[i][j + 1] == (char)42) || (field[i + 1][j] == (char)42 && field[i][j - 1] == (char)42) || (field[i - 1][j] == (char)42 && field[i][j - 1] == (char)42)))
 					mistake = 6;
-				if (j == 0 && i == 0 && field[i][j] == field[i + 1][j] && field[i][j] == field[i][j + 1])
+				if (j == 0 && i == 0 && field[i + 1][j] == (char)42 && field[i][j + 1] == (char)42)
 					mistake = 7;
-				if (j == 9 && i == 0 && field[i][j] == field[i + 1][j] && field[i][j] == field[i][j - 1])
+				if (j == 9 && i == 0 && field[i + 1][j] == (char)42 && field[i][j - 1] == (char)42)
 					mistake = 8;
-				if (j == 0 && i == 9 && field[i][j] == field[i - 1][j] && field[i][j] == field[i][j + 1])
+				if (j == 0 && i == 9 && field[i - 1][j] == (char)42 && field[i][j + 1] == (char)42)
 					mistake = 9;
-				if (j == 9 && i == 9 && field[i][j] == field[i - 1][j] && field[i][j] == field[i][j - 1])
+				if (j == 9 && i == 9 && field[i - 1][j] == (char)42 && field[i][j - 1] == (char)42)
 					mistake = 10;
 			}
 		}
@@ -151,17 +151,19 @@ int check_for_mistakes(char field[10][10]) {
 
 bool error(char field[10][10]) 
 {	
-	if (check(field) == 20) {
-		return false;
+	bool mistake = false;
+	if (check(field) != 20) {
+		cout << "Код ошибки: 0\n";
+		mistake = true;
 	}
-	else if (check_for_mistakes(field) != 0) {
+	if (check_for_mistakes(field) != 0) {
 		cout << "Код ошибки: " << check_for_mistakes(field) << '\n';
-		return true;
+		mistake = true;
 	}
 	else {
-		cout << "Код ошибки: 0\n";
-		return true;
+		mistake = false;
 	}
+	return mistake;
 }
 
 int check_for_ships(char field[10][10]) {
