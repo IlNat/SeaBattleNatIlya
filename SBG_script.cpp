@@ -226,14 +226,12 @@ int make_computer_move() {
 
 void make_next_move() {
 	if (is_player_move) {
-		make_player_move();
 		if (make_player_move() == 1)
 			is_player_move = true;
 		else
 			is_player_move = false;
 	}
 	if(!is_player_move) {
-		make_computer_move();
 		if (make_computer_move() == 0)
 			is_player_move = true;
 		else
