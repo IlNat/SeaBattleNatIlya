@@ -23,7 +23,7 @@ void fill_all_fields()
 {
 	char temp1[10][10];
 	char temp2[10][10];
-	ifstream computer_field_input("C:\\Users\\Admin\\source\\repos\\SeaBattleGameNatIlya\\CBF.txt");
+	ifstream computer_field_input("CBF.txt");
 	if (!computer_field_input) {
 		cout << "Файл с игровым полем компьютера отсутствует.\n";
 	}
@@ -35,7 +35,7 @@ void fill_all_fields()
 		}
 		computer_field_input.close();
 	}
-	ifstream user_field_input("C:\\Users\\Admin\\source\\repos\\SeaBattleGameNatIlya\\UBF.txt");
+	ifstream user_field_input("UBF.txt");
 	if (!user_field_input) {
 		cout << "Файл с Вашим игровым полем отсутствует.\n";
 	}
