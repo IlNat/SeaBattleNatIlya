@@ -8,11 +8,13 @@ char empty_computer_field[10][10];
 
 bool is_player_move = true;
 
+const int max_num_of_cells = 20;
+
 void fill_empty_computer_field()
 {
 	for (int i = 0; i < 10; i++) {
 		for (int j = 0; j < 10; j++) {
-			empty_computer_field[i][j] = '#';
+			empty_computer_field[i][j] = (char)35;
 		}
 	}
 }
@@ -64,7 +66,7 @@ void fill_all_fields()
 
 
 
-void print(char field[10][10])
+void print_field(char field[10][10])
 {
 	for (int i = 0; i < 11; i++) {
 		for (int j = 0; j < 11; j++) {
@@ -97,32 +99,32 @@ void print_user_field()
 {
 	
 	cout << "ѕечать игрового пол€ пользовател€(\'#\' - пустое пространство; \'*\' - корабль/часть корабл€; \'-\' - промах; \'+\' - попадание по ¬ашему кораблю;): \n";
-	print(user_field);
+	print_field(user_field);
 }
 
 void print_empty_computer_field()
 {
 	cout << "ѕечать игрового пол€ противника(\'#\' - пустое пространство; \'*\' - корабль/часть корабл€; \'-\' - промах;): \n";
-	print(empty_computer_field);
+	print_field(empty_computer_field);
 }
 
 int check(char field[10][10]) {
-	int kolvo = 0;
+	int amount_of_cells = 0;
 	for (int i = 0; i < 10; i++) {
 		for (int j = 0; j < 10; j++) {
 			if (field[i][j] == (char)42) {
-				kolvo++;
+				amount_of_cells++;
 			}
 		}
 	}
-	return kolvo;
+	return amount_of_cells;
 }
 
-int check_for_mistakes(char field[10][10]) {
+int check_for_mistakes(char field[10][10]) {// Checking fields for mistakes and return code of mistake.
 	int mistake = 0;
 	for (int i = 0; i < 9; i++) {
 		for (int j = 0; j < 9; j++) {
-			if (field[i][j] == (char)42) {//(char)42 = '*'
+			if (field[i][j] == (char)42) {//(char)35 = '#'; (char)42 = '*'; (char)43 = '+'; (char)45 = '-';  
 				if (j < 6 && field[i][j + 1] == (char)42 && field[i][j + 2] == (char)42 && field[i][j + 3] == (char)42 && field[i][j + 4] == (char)42)//(char)42 = '*'
 					mistake = 1;
 				if (i < 6 && field[i + 1][j] == (char)42 && field[i + 2][j] == (char)42 && field[i + 3][j] == (char)42 && field[i + 4][j] == (char)42)
@@ -149,7 +151,7 @@ int check_for_mistakes(char field[10][10]) {
 	return mistake;
 }
 
-bool error(char field[10][10]) 
+bool error(char field[10][10])//Return true if error happenend. 
 {	
 	bool mistake = false;
 	if (check(field) != 20) {
@@ -166,22 +168,22 @@ bool error(char field[10][10])
 	return mistake;
 }
 
-int check_for_ships(char field[10][10]) {
-	int kolvo = 0;
+int check_for_destroyed_ships(char field[10][10]) {
+	int amount_of_cells = 0;
 	for (int i = 0; i < 10; i++) {
 		for (int j = 0; j < 10; j++) {
 			if (field[i][j] == (char)43) {
-				kolvo++;
+				amount_of_cells++;
 			}
 		}
 	}
-	return kolvo;
+	return amount_of_cells;
 }
 
 int game_over() {
-	if (check_for_ships(user_field) == 20) 
+	if (check_for_destroyed_ships(user_field) == max_num_of_cells) 
 		return 1;
-	else if (check_for_ships(empty_computer_field) == 20) 
+	else if (check_for_destroyed_ships(empty_computer_field) == max_num_of_cells) 
 		return 2;
 	else
 		return 0;
@@ -194,9 +196,9 @@ int make_player_move() {
 		cin >> fstcord >> scdcord;
 		fstcord--;
 		scdcord--;
-		if (empty_computer_field[fstcord][scdcord] != '#' || fstcord > 9 || fstcord < 0 || scdcord < 0 || scdcord > 9)
+		if (empty_computer_field[fstcord][scdcord] != (char)35 || fstcord > 9 || fstcord < 0 || scdcord < 0 || scdcord > 9)
 			cout << "¬ведите другие координаты.\n";
-	} while (empty_computer_field[fstcord][scdcord] != '#' || fstcord > 9 || fstcord < 0 || scdcord < 0 || scdcord > 9);
+	} while (empty_computer_field[fstcord][scdcord] != (char)35 || fstcord > 9 || fstcord < 0 || scdcord < 0 || scdcord > 9);
 	if (computer_field[fstcord][scdcord] == '#') {
 		cout << "ѕромах.\n";
 		empty_computer_field[fstcord][scdcord] = (char)45;
@@ -215,13 +217,13 @@ int make_computer_move() {
 	do {
 		fstcord = rand() % 10;
 		scdcord = rand() % 10;
-	} while (user_field[fstcord][scdcord] != '#' && user_field[fstcord][scdcord] != '*');
-	if (user_field[fstcord][scdcord] == '#') {
-		user_field[fstcord][scdcord] = (char)45;// (char)45 = '-'
+	} while (user_field[fstcord][scdcord] != (char)35 && user_field[fstcord][scdcord] != (char)42);
+	if (user_field[fstcord][scdcord] == (char)35) {
+		user_field[fstcord][scdcord] = (char)45;
 		return 0; 
 	}
 	else {
-		user_field[fstcord][scdcord] = (char)43;// (char)43 = '+'
+		user_field[fstcord][scdcord] = (char)43;
 		return 1;
 	}
 }
